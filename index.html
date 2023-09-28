@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caesar Cipher</title>
+  </head>
+  <body>
+    <section>
+      <form onsubmit="return false">
+        <input
+          type="text"
+          id="textInput"
+          placeholder="write text..."
+          required
+        />
+
+        <input
+          type="number"
+          id="keyInput"
+          placeholder="enter key..."
+          min="1"
+          required
+        />
+
+        <input type="submit" id="encode" value="encoder" onclick="encoder()" />
+
+        <input type="submit" id="decode" value="decoder" onclick="decoder()" />
+      </form>
+    </section>
+    <section>
+      <p id="encodedOutput" style="color: crimson"><br /></p>
+      <p id="decodedOutput" style="color: forestgreen"><br /></p>
+    </section>
+    <script src="./assets/js/main.js"></script>
+  </body>
+</html>
