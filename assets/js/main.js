@@ -1,89 +1,93 @@
 let alphabet_str = "abcdefghijklmnopqrstuvwxyz";
 
-// - E N C O D E --------------------------------------------------------------
+// - E N C O D E ----------------------------------------------------------------------------------
 
 function encoder() {
+  // * input aus html lesen
   let text_input = document.getElementById("textInput").value;
   console.log(text_input);
-  //   regex benutzem zum entfernen von satzzeichen und leerzeichen
+  let key = Number(document.getElementById("keyInput").value);
+  //
+  //   * regex benutzen zum entfernen von satzzeichen und leerzeichen
   let clean_text = text_input.replace(/[^\w\s]/g, "").replace(/\s/g, "");
   clean_text = clean_text.toLowerCase();
   console.log(clean_text);
-  //   text splitten und einzelne buchstaben in array speichern
+  //
+  //   * input text splitten und einzelne buchstaben in word_array speichern
   let word_array = clean_text.split("");
   console.log("word array", word_array);
-  let key = Number(document.getElementById("keyInput").value);
 
+  // * alphabet string splitten und einzelne buchstaben als elemente in array speichern
+  let alphabet_array = alphabet_str.split("");
+  console.log(alphabet_array);
   //
-  let letter_array = alphabet_str.split("");
+  // * loop der durch die buchstaben des input läuft
   let encoded_index_array = [];
   for (let i = 0; i < word_array.length; i++) {
-    // const char = word_array[i].toLowerCase();
-    const index = letter_array.indexOf(word_array[i]);
-    // prüfen ob word_array[i] im alphabet enthalten ist
-    if (index !== -1) {
-      // verschiebung des index um ~key~ solange (index+key) < 26 ist,
-      //   sonst (index+key) -26 --> "modulo-addition"
-      const encoded_index = (index + key) % 26;
+    //
+    // * const: ordnet dem word_array mit den input buchstaben einen alphabetisch aufsteigenden index zu:
+    // * also a=0, b=1, c=2, ...., z=25;
+    const alphabet_index = alphabet_array.indexOf(word_array[i]);
+    //
+    // * prüfen ob eigegebene buchstaben im alphabet vorhanden sind
+    if (alphabet_index !== -1) {
+      //
+      // * verschiebung des index um ~key~ solange (index+key) < 26 ist,
+      // * sonst (index+key) - 26 --> "modulo-addition"
+      // * und pusht dann die verschobenen indices in einen neuen array
+      const encoded_index = (alphabet_index + key) % 26;
       encoded_index_array.push(encoded_index);
-      console.log(index, "->", encoded_index);
+      console.log(`index-verschiebung: ${alphabet_index} -> ${encoded_index}`);
     }
   }
 
-  console.log("encoded num array", encoded_index_array);
+  console.log("encoded index array", encoded_index_array);
 
+  // * loop der durch den array mit den verschobenen indices läuft
   let encoded_letters = [];
   for (let i = 0; i < encoded_index_array.length; i++) {
+    //
+    // * inhalt der variablen encoded_index hier und im loop oben ist identisch, deshalb gleiche benennung
+    // * verschobenen indices die zugehörigen buchstaben des alphabets zuweisen u. diese in array pushen
     let encoded_index = encoded_index_array[i];
-    encoded_letters.push(letter_array[encoded_index]);
-    console.log("encoded index", encoded_index);
+    encoded_letters.push(alphabet_array[encoded_index]);
   }
-  console.log(word_array);
-  console.log(encoded_letters);
-
+  console.log("encoded letters", encoded_letters);
+  //
+  // * output text für html generieren
   let encoded_text = encoded_letters.join("");
-  encodedOutput.innerHTML = `</br> ${encoded_text}`;
+  encodedOutput.innerHTML = encoded_text;
   console.log(encoded_text);
 }
 
-// - D E C O D E --------------------------------------------------------------
-// genau gleich nur mit negativem key
+// - D E C O D E ----------------------------------------------------------------------------------
+
+// * ablauf ist analog zu encode, jedoch mit negativem key und modulo-subtraktion
 function decoder() {
   let text_input = document.getElementById("textInput").value;
-  console.log(text_input);
   let clean_text = text_input.replace(/[^\w\s]/g, "").replace(/\s/g, "");
   clean_text = clean_text.toLowerCase();
-  console.log(clean_text);
 
   let word_array = clean_text.split("");
-  console.log("word array", word_array);
   let key = Number(document.getElementById("keyInput").value);
 
-  let letter_array = alphabet_str.split("");
+  let alphabet_array = alphabet_str.split("");
   let decoded_index_array = [];
   for (let i = 0; i < word_array.length; i++) {
-    const index = letter_array.indexOf(word_array[i]);
-    if (index !== -1) {
-      let decoded_index = (index - key) % 26;
+    const alphabet_index = alphabet_array.indexOf(word_array[i]);
+    if (alphabet_index !== -1) {
+      let decoded_index = (alphabet_index - key) % 26; // hier mudulo-subtraktion
       if (decoded_index < 0) {
         decoded_index += 26;
       }
       decoded_index_array.push(decoded_index);
-      console.log(index, "->", decoded_index);
     }
   }
-  console.log("decoded num array", decoded_index_array);
-
   let decoded_letters = [];
   for (let i = 0; i < decoded_index_array.length; i++) {
     const decoded_index = decoded_index_array[i];
-    decoded_letters.push(letter_array[decoded_index]);
-    console.log("decoded index", decoded_index);
+    decoded_letters.push(alphabet_array[decoded_index]);
   }
-  console.log(word_array);
-  console.log(decoded_letters);
-
   let decoded_text = decoded_letters.join("");
-  decodedOutput.innerHTML = `<br> ${decoded_text} `;
-  console.log(decoded_text);
+  decodedOutput.innerHTML = decoded_text;
 }
