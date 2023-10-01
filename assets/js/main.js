@@ -7,29 +7,30 @@ function encoder() {
   let text_input = document.getElementById("textInput").value;
   console.log(text_input);
   let key = Number(document.getElementById("keyInput").value);
-  //
+
   //   * regex benutzen zum entfernen von satzzeichen und leerzeichen
   let clean_text = text_input.replace(/[^\w\s]/g, "").replace(/\s/g, "");
   clean_text = clean_text.toLowerCase();
   console.log(clean_text);
-  //
+
   //   * input text splitten und einzelne buchstaben in word_array speichern
   let word_array = clean_text.split("");
   console.log("word array", word_array);
 
   // * alphabet string splitten und einzelne buchstaben als elemente in array speichern
   let alphabet_array = alphabet_str.split("");
-  console.log(alphabet_array);
-  //
+  console.log("alphabet array", alphabet_array);
+
   // * loop der durch die buchstaben des input läuft
   let encoded_index_array = [];
   for (let i = 0; i < word_array.length; i++) {
     //
-    // * const: ordnet dem word_array mit den input buchstaben einen alphabetisch aufsteigenden index zu:
+    // * loop sucht für jedes element im word_array (input) den buchstaben im alphabet
+    // * und ordnet ihm einen alphabetisch aufsteigenden index zu:
     // * also a=0, b=1, c=2, ...., z=25;
     const alphabet_index = alphabet_array.indexOf(word_array[i]);
-    //
-    // * prüfen ob eigegebene buchstaben im alphabet vorhanden sind
+
+    // * prüfen ob eingegebene buchstaben im alphabet vorhanden sind
     if (alphabet_index !== -1) {
       //
       // * verschiebung des index um ~key~ solange (index+key) < 26 ist,
@@ -40,7 +41,6 @@ function encoder() {
       console.log(`index-verschiebung: ${alphabet_index} -> ${encoded_index}`);
     }
   }
-
   console.log("encoded index array", encoded_index_array);
 
   // * loop der durch den array mit den verschobenen indices läuft
@@ -76,7 +76,7 @@ function decoder() {
   for (let i = 0; i < word_array.length; i++) {
     const alphabet_index = alphabet_array.indexOf(word_array[i]);
     if (alphabet_index !== -1) {
-      let decoded_index = (alphabet_index - key) % 26; // hier mudulo-subtraktion
+      let decoded_index = (alphabet_index - key) % 26; // hier modulo-subtraktion
       if (decoded_index < 0) {
         decoded_index += 26;
       }
@@ -91,3 +91,8 @@ function decoder() {
   let decoded_text = decoded_letters.join("");
   decodedOutput.innerHTML = decoded_text;
 }
+
+// ? mögliche variante:
+// theoretisch brauche ich keine zwei funktionen, ich könnte auf beiden buttons die gleiche
+// funktion auslösen und je nach value des buttons unterscheiden ob encode/decode
+// und dann entsprechenden modulo addition oder subtraktion ausführen
